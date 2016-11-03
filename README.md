@@ -100,3 +100,8 @@ var html = theme('jquery_cycle2', {
 });
 return html;
 ```
+
+#### Extra options
+```
+withinPageshow: true, // defaults to false, set to true when using within a pageshow callback
+```
