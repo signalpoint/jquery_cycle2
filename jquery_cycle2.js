@@ -60,6 +60,12 @@ function jquery_cycle2_drupalgap_goto_preprocess(path) {
  */
 function theme_jquery_cycle2(variables) {
 
+  // Skip empty slideshows.
+  if (!variables.items || !variables.items.length) {
+    console.log('theme_jquery_cycle2 - empty slideshow');
+    return '';
+  }
+
   // Set any defaults that weren't provided.
   var defaults = {
     display: {
@@ -93,19 +99,29 @@ function theme_jquery_cycle2(variables) {
       var image = { path: path };
       html += theme('image', image);
     }
+    else { console.log('WARNING: theme_jquery_cycle2 - no uri, src or path property provided with item: ', item); }
   });
 
   // Close the cycle div container.
   html += variables.display.field_suffix + '</div>' + variables.display.suffix;
 
-  // Add a papeshow handler to initialize the cycle.
-  var pageshowKey = variables.entity_type && variables.entity ?
+  // If we were instructed that we're already past the pageshow event, then just move onward after
+  // a slight timeout. Otherwise set up a typical pageshow handler to init the slideshow.
+  var handlerArgs = JSON.stringify({});
+  if (variables.withinPageshow && variables.withinPageshow === true) {
+    setTimeout(function() {
+      jquery_cycle2_pageshow(handlerArgs);
+    }, 1);
+  }
+  else {
+    var pageshowKey = variables.entity_type && variables.entity ?
     variables.entity_type + '-' + variables.entity[entity_primary_key(variables.entity_type)] :
-    user_password();
-  html += drupalgap_jqm_page_event_script_code({
-    jqm_page_event_callback: 'jquery_cycle2_pageshow',
-    jqm_page_event_args: JSON.stringify({})
-  }, pageshowKey);
+        user_password();
+    html += drupalgap_jqm_page_event_script_code({
+      jqm_page_event_callback: 'jquery_cycle2_pageshow',
+      jqm_page_event_args: handlerArgs
+    }, pageshowKey);
+  }
 
   return html;
 }
