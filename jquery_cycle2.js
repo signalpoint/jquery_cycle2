@@ -99,7 +99,10 @@ function theme_jquery_cycle2(variables) {
       var image = { path: path };
       html += theme('image', image);
     }
-    else { console.log('WARNING: theme_jquery_cycle2 - no uri, src or path property provided with item: ', item); }
+    else {
+      // The item wasn't an object, so just assume it's an html string and append it.
+      html += item;
+    }
   });
 
   // Close the cycle div container.
