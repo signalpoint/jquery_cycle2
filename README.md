@@ -105,3 +105,22 @@ return html;
 ```
 withinPageshow: true, // defaults to false, set to true when using within a pageshow callback
 ```
+
+#### Non-image slideshows
+
+@see http://jquery.malsup.com/cycle2/demo/non-image.php
+
+You can make an items array of strings for non-image slideshows:
+
+```
+var items = [
+  '<div>Slide 1</div>',
+  '<div>Slide 2</div>',
+  '<div>Slide 3</div>'
+];
+```
+Then just add a `setting` to indicate the slides are made of `div` elements instead:
+```
+'data-cycle-slides': "> div"
+```
+
